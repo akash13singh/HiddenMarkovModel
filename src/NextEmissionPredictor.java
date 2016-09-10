@@ -42,7 +42,7 @@ public class NextEmissionPredictor {
 	 * code to convert a string of numbers separated by space into 2d arrays. 
 	 * array dimesnions are the first two numbers in the string
 	 */
-	private double[][] convertStringToArray(String str){
+	private double[][] convertStringTo2DArray(String str){
 		String[] arr = str.split(" ");
 		int rows = Integer.parseInt(arr[0]);
 		int cols = Integer.parseInt(arr[1]);
@@ -86,9 +86,9 @@ public class NextEmissionPredictor {
 	}
 		
 	private  double[][] calculateNextEmissionDistribution(String[] hmmModel){
-		transitionMatrix = convertStringToArray(hmmModel[0]);
-		emmissionMatrix = convertStringToArray(hmmModel[1]);
-		stateDistribution = convertStringToArray(hmmModel[2]);
+		transitionMatrix = convertStringTo2DArray(hmmModel[0]);
+		emmissionMatrix = convertStringTo2DArray(hmmModel[1]);
+		stateDistribution = convertStringTo2DArray(hmmModel[2]);
 		nextStateDistribution = matrixMultiplication(stateDistribution, transitionMatrix);
 		nextEmissionDistribution = matrixMultiplication(nextStateDistribution,emmissionMatrix);
 		return nextEmissionDistribution;
