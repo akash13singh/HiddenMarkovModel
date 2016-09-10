@@ -1,0 +1,1 @@
+This project implements Hidden markove Models(HMM). The code includes classes for different HMM problems as well as code to train machine to play the DuckHunt game. Each class can be run as a stand-alone without any external dependency
