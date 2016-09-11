@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author akash
  *
  */
-public class ForwardPass {
+public class Viterbi {
 
 	/*
 	 * TODO use setters and getters for these variables.
@@ -23,6 +23,8 @@ public class ForwardPass {
 	private int[] emissionSequence = null;
 	//c: scale factor
 	private double[] c = null;
+	
+	private int[] stateSeq = null;
 	
 	// an N*T matrix used in alpha/forward pass
 	private double[][] alpha = null;
@@ -112,6 +114,7 @@ public class ForwardPass {
 		
 	    c = new double[T];
 		alpha = new double[N][T];
+		stateSeq = new int[T];
 		
 	    //calculate alpha 0;
 		c[0]=0 ;
@@ -125,6 +128,20 @@ public class ForwardPass {
 		for(int i = 0; i<N; i++){
 			alpha[i][0]= c[0] * alpha[i][0]; 
 		}
+		
+		double max = -999;
+		int max_state = -1 ;
+		for(int i = 0; i<N; i++){
+			if ( alpha[i][0] > max  ){
+				max = alpha[i][0] ; 
+				max_state = i;
+				}
+		}
+		
+/*		System.out.println(max);
+		stateSeq[0] = max_state;
+		System.out.println(Arrays.toString(stateSeq));*/
+
 		
 		//compute alpha[i][t]
 		for(int t =1; t<T; t++){
@@ -143,9 +160,20 @@ public class ForwardPass {
 			for(int i = 0; i<N; i++){
 				alpha[i][t] = c[t]*alpha[i][t];	
 			}
-			System.out.println(Arrays.deepToString(alpha));
-			System.out.println("============");
+/*			System.out.println(Arrays.deepToString(alpha));
+			System.out.println("============");*/
 
+			max = -999;
+		    max_state = -1 ;
+			for(int i = 0; i<N; i++){
+				if ( alpha[i][t] > max  ){
+					max = alpha[i][t] ; 
+					max_state = i;
+					}
+			}
+			
+			stateSeq[t] = max_state;
+			//System.out.println(Arrays.toString(stateSeq));
 		}
 		
 		
@@ -177,10 +205,10 @@ public class ForwardPass {
 	
 	public static void main(String[] args){
 		String[] input =null;
-		ForwardPass calc = new ForwardPass();
+		Viterbi vit = new Viterbi();
 		
 		try {
-			input =  calc.readInput();
+			input =  vit.readInput();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -191,8 +219,8 @@ public class ForwardPass {
 //			System.out.println(input[i]);
 //		}
 		
-		double prob = calc.calculateEmissionProbability(input);
-		System.out.println(prob);
+		double prob = vit.calculateEmissionProbability(input);
+		System.out.println(Arrays.toString(vit.stateSeq).replaceAll("[\\[\\],]", ""));
 		
 	}
 	
