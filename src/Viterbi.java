@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 
 /**
- * @author akash
+ * @author mazen
  *
  */
 public class Viterbi {
@@ -25,6 +25,9 @@ public class Viterbi {
 	private double[] c = null;
 	
 	private int[] stateSeq = null;
+	private double[] stateSeqProb = null;
+
+	
 	
 	// an N*T matrix used in alpha/forward pass
 	private double[][] alpha = null;
@@ -110,20 +113,22 @@ public class Viterbi {
 	  return c;
 	}
 	
-	private void alphaPass(){
+	private void viterbi(){
 		
 	    c = new double[T];
 		alpha = new double[N][T];
 		stateSeq = new int[T];
-		
+		stateSeqProb = new double[T];
+
 	    //calculate alpha 0;
-		c[0]=0 ;
+		//c[0]=0 ;
 		for(int i = 0; i<N; i++){
 			alpha[i][0]= initialStateDistribution[0][i] * emmissionMatrix[i][emissionSequence[0]];
 			c[0] = c[0] + alpha[i][0];
 		}		
 		c[0] = 1/c[0];	
-		
+		//System.out.println(Arrays.deepToString(alpha));
+
 		//scale alpha[i][0]
 		for(int i = 0; i<N; i++){
 			alpha[i][0]= c[0] * alpha[i][0]; 
@@ -137,16 +142,18 @@ public class Viterbi {
 				max_state = i;
 				}
 		}
-		
-/*		System.out.println(max);
 		stateSeq[0] = max_state;
-		System.out.println(Arrays.toString(stateSeq));*/
+		stateSeqProb[0] = max;
+		//System.out.println(max);
+		
+		//System.out.println(Arrays.toString(stateSeq));
 
 		
 		//compute alpha[i][t]
 		for(int t =1; t<T; t++){
 			c[t]=0;
 			for(int i = 0; i<N; i++){
+				//alpha[i][t]= stateSeqProb[t-1] * transitionMatrix[stateSeq[t-1] ][i];
 				alpha[i][t]=0;
 				for(int j=0; j<N;j++){
 					alpha[i][t] = alpha[i][t]+  alpha[j][t-1] * transitionMatrix[j][i];
@@ -154,7 +161,7 @@ public class Viterbi {
 				alpha[i][t] = alpha[i][t] * emmissionMatrix[i][emissionSequence[t]];
 				c[t]= c[t]+alpha[i][t];
 			}
-			System.out.println(Arrays.deepToString(alpha));
+		 	//System.out.println(Arrays.deepToString(alpha));
 			//scale alpha[i][t]
 			c[t] = 1/c[t];
 			for(int i = 0; i<N; i++){
@@ -171,8 +178,8 @@ public class Viterbi {
 					max_state = i;
 					}
 			}
-			
 			stateSeq[t] = max_state;
+			stateSeqProb[t] = max;
 			//System.out.println(Arrays.toString(stateSeq));
 		}
 		
@@ -195,7 +202,7 @@ public class Viterbi {
 		N = transitionMatrix.length;
 		T= emissionSequence.length;
 		
-		alphaPass();
+		viterbi();
 		
 		for(int t = 0; t<T; t++){
 			prob = prob*c[t];
@@ -221,7 +228,6 @@ public class Viterbi {
 		
 		double prob = vit.calculateEmissionProbability(input);
 		System.out.println(Arrays.toString(vit.stateSeq).replaceAll("[\\[\\],]", ""));
-		
 	}
 	
 
