@@ -114,7 +114,7 @@ public class ForwardPass {
 		alpha = new double[N][T];
 		
 	    //calculate alpha 0;
-		c[0]=0 ;
+		//c[0]=0 ;
 		for(int i = 0; i<N; i++){
 			alpha[i][0]= initialStateDistribution[0][i] * emmissionMatrix[i][emissionSequence[0]];
 			c[0] = c[0] + alpha[i][0];
@@ -137,14 +137,14 @@ public class ForwardPass {
 				alpha[i][t] = alpha[i][t] * emmissionMatrix[i][emissionSequence[t]];
 				c[t]= c[t]+alpha[i][t];
 			}
-			System.out.println(Arrays.deepToString(alpha));
+			//System.out.println(Arrays.deepToString(alpha));
 			//scale alpha[i][t]
 			c[t] = 1/c[t];
 			for(int i = 0; i<N; i++){
 				alpha[i][t] = c[t]*alpha[i][t];	
 			}
-			System.out.println(Arrays.deepToString(alpha));
-			System.out.println("============");
+/*			System.out.println(Arrays.deepToString(alpha));
+			System.out.println("============");*/
 
 		}
 		
