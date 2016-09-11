@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 /**
- * Code to calculate emission sequence probability
+ * Code to calculate emission sequence probability. Implements the Forward Pass Algorithm
  * Refer Stamp Tutorial: https://www.cs.sjsu.edu/~stamp/RUA/HMM.pdf
  */
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author akash
  *
  */
-public class NextEmissionProb {
+public class ForwardPass {
 
 	/*
 	 * TODO use setters and getters for these variables.
@@ -173,7 +173,7 @@ public class NextEmissionProb {
 	
 	public static void main(String[] args){
 		String[] input =null;
-		NextEmissionProb calc = new NextEmissionProb();
+		ForwardPass calc = new ForwardPass();
 		
 		try {
 			input =  calc.readInput();
