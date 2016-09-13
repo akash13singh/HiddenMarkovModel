@@ -4,21 +4,12 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 /**
-<<<<<<< HEAD
- * Code to calculate emission sequence probability. Implements the Forward Pass Algorithm
- * Refer Stamp Tutorial: https://www.cs.sjsu.edu/~stamp/RUA/HMM.pdf
- */
-
-/**
- * @author mazen
-=======
  * Implements the Viterbi pass algorith. A DP algorithm to calculate the most likely state sequence 
  * given the HMM Model and observation sequence (emission sequence).
  */
 
 /**
  * @author akash
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
  *
  */
 public class Viterbi {
@@ -30,20 +21,6 @@ public class Viterbi {
 	private double[][] emmissionMatrix = null;
 	private double[][] initialStateDistribution = null;
 	private int[] emissionSequence = null;
-<<<<<<< HEAD
-	//c: scale factor
-	private double[] c = null;
-	
-	private int[] stateSeq = null;
-	private double[] stateSeqProb = null;
-
-	
-	
-	// an N*T matrix used in alpha/forward pass
-	private double[][] alpha = null;
-	
-=======
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 	
 	// number of states
 	private int N;
@@ -51,8 +28,6 @@ public class Viterbi {
 	// length of emmission sequence;
 	private int T;
 	
-<<<<<<< HEAD
-=======
 	//N*T matrix to store δt(i) the prob of having observed O[1:t] and being in state i given the most likely state for each t
 	private double[][] delta = null;
 	
@@ -63,7 +38,6 @@ public class Viterbi {
 	private int[] mostLikelyStates = null;
 
 	
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 	/*
 	 * reads input file through pipe
 	 */
@@ -111,110 +85,6 @@ public class Viterbi {
 	}
 	
 	/*
-<<<<<<< HEAD
-	 * code to multiply two matrices
-	 */
-	private double[][] matrixMultiplication(double[][] a, double[][] b){ 
-	  int rows = a.length;
-	  int loop= a[0].length;
-	  int cols = b[0].length;
-	  double[][] c = new double[rows][cols];
-	  
-	  // uncomment the below lines for debugging
-	  /*
-	     System.out.println(Arrays.deepToString(a));
-	     System.out.println(Arrays.deepToString(b))	;
-	  */
-	  
-	  for(int i=0;i<rows;i++){
-		  for(int j=0;j<loop;j++){
-			  for(int k =0;k<cols;k++){
-				  c[i][k] += a[i][j]*b[j][k];
-				  //c[i][k] = new BigDecimal(c[i][k]).setScale(2, RoundingMode.HALF_UP).doubleValue();
-			  }
-			 
-		  }
-	  }
-	  
-	  return c;
-	}
-	
-	private void viterbi(){
-		
-	    c = new double[T];
-		alpha = new double[N][T];
-		stateSeq = new int[T];
-		stateSeqProb = new double[T];
-
-	    //calculate alpha 0;
-		//c[0]=0 ;
-		for(int i = 0; i<N; i++){
-			alpha[i][0]= initialStateDistribution[0][i] * emmissionMatrix[i][emissionSequence[0]];
-			c[0] = c[0] + alpha[i][0];
-		}		
-		c[0] = 1/c[0];	
-		//System.out.println(Arrays.deepToString(alpha));
-
-		//scale alpha[i][0]
-		for(int i = 0; i<N; i++){
-			alpha[i][0]= c[0] * alpha[i][0]; 
-		}
-		
-		double max = -999;
-		int max_state = -1 ;
-		for(int i = 0; i<N; i++){
-			if ( alpha[i][0] > max  ){
-				max = alpha[i][0] ; 
-				max_state = i;
-				}
-		}
-		stateSeq[0] = max_state;
-		stateSeqProb[0] = max;
-		//System.out.println(max);
-		
-		//System.out.println(Arrays.toString(stateSeq));
-
-		
-		//compute alpha[i][t]
-		for(int t =1; t<T; t++){
-			c[t]=0;
-			for(int i = 0; i<N; i++){
-				//alpha[i][t]= stateSeqProb[t-1] * transitionMatrix[stateSeq[t-1] ][i];
-				alpha[i][t]=0;
-				for(int j=0; j<N;j++){
-					alpha[i][t] = alpha[i][t]+  alpha[j][t-1] * transitionMatrix[j][i];
-				}
-				alpha[i][t] = alpha[i][t] * emmissionMatrix[i][emissionSequence[t]];
-				c[t]= c[t]+alpha[i][t];
-			}
-		 	//System.out.println(Arrays.deepToString(alpha));
-			//scale alpha[i][t]
-			c[t] = 1/c[t];
-			for(int i = 0; i<N; i++){
-				alpha[i][t] = c[t]*alpha[i][t];	
-			}
-/*			System.out.println(Arrays.deepToString(alpha));
-			System.out.println("============");*/
-
-			max = -999;
-		    max_state = -1 ;
-			for(int i = 0; i<N; i++){
-				if ( alpha[i][t] > max  ){
-					max = alpha[i][t] ; 
-					max_state = i;
-					}
-			}
-			stateSeq[t] = max_state;
-			stateSeqProb[t] = max;
-			//System.out.println(Arrays.toString(stateSeq));
-		}
-		
-		
-	}
-	
-	private double calculateEmissionProbability(String[] hmmParams){
-		double prob =1;
-=======
 	 * implememts the viterbi DP logic.
 	 * uses log to store delta values to avoid underflow.
 	 */
@@ -291,17 +161,12 @@ public class Viterbi {
 	
 	private void estimateLikelyStateSEquence(String[] hmmParams){
 
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 		transitionMatrix = convertStringTo2DArray(hmmParams[0]);
 		emmissionMatrix = convertStringTo2DArray(hmmParams[1]);
 		initialStateDistribution = convertStringTo2DArray(hmmParams[2]);
 		emissionSequence = convertStringTo1DArray(hmmParams[3]);
 		
-<<<<<<< HEAD
-//		uncomment for debugging
-=======
 		//uncomment for debugging
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 //		System.out.println(Arrays.deepToString(transitionMatrix));
 //		System.out.println(Arrays.deepToString(emmissionMatrix));
 //		System.out.println(Arrays.deepToString(initialStateDistribution));
@@ -310,33 +175,17 @@ public class Viterbi {
 		N = transitionMatrix.length;
 		T= emissionSequence.length;
 		
-<<<<<<< HEAD
-		viterbi();
-		
-		for(int t = 0; t<T; t++){
-			prob = prob*c[t];
-		}
-		return 1/prob;
-=======
 		 double maxProb = viterbiDP();
 		 //System.out.println("Max Prob :"+maxProb);
 		 System.out.println(Arrays.toString(mostLikelyStates).replaceAll("[\\[\\],]", ""));
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 	}
 	
 	public static void main(String[] args){
 		String[] input =null;
-<<<<<<< HEAD
-		Viterbi vit = new Viterbi();
-		
-		try {
-			input =  vit.readInput();
-=======
 		Viterbi vitrb = new Viterbi();
 		
 		try {
 			input =  vitrb.readInput();
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -347,13 +196,8 @@ public class Viterbi {
 //			System.out.println(input[i]);
 //		}
 		
-<<<<<<< HEAD
-		double prob = vit.calculateEmissionProbability(input);
-		System.out.println(Arrays.toString(vit.stateSeq).replaceAll("[\\[\\],]", ""));
-=======
 		vitrb.estimateLikelyStateSEquence(input);
 		
->>>>>>> 366b6870d045c02917ac3f75602397f4554435eb
 	}
 	
 
